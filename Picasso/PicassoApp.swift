@@ -96,7 +96,7 @@ struct PicassoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if firstTime || sourcedRepoFetcher.showLogin {
+            if firstTime {
                 InitialOnboardingView()
                     .transition(.opacity.animation(.easeInOut(duration: 0.5)))
             } else {
@@ -227,9 +227,9 @@ struct PicassoApp: App {
 //                }
 //            }
             
-            if sourcedRepoFetcher.userToken != nil {
+//            if sourcedRepoFetcher.userToken != nil {
                 exploitAndDRM()
-            }
+//            }
         } catch {
 #if targetEnvironment(simulator)
 #else
@@ -241,18 +241,20 @@ struct PicassoApp: App {
     func exploitAndDRM() {
         Task {
             UIApplication.shared.alert(title: "Logging in...", body: "This shouldn't take longer than 1 second.", withButton: false)
-            do {
-//                try await doDRMCheck(s: UserDefaults.standard.string(forKey: "userToken")!)
-                loggedIn = true
-            } catch {
-                UIApplication.shared.change(title: "Error", body: "An error occured while validating your license. \(error.localizedDescription)\n\n (Logging out usually resolves unknown issues)", addCancelWithTitle: "Log Out", onCancel: {
-//                    #if DEBUG
-//                    UserDefaults.standard.set(nil, forKey: "customBackendURL")
-//                    #else
-                    sourcedRepoFetcher.logout()
-//                    #endif
-                })
-                return
+            if sourcedRepoFetcher.userToken != nil {
+                do {
+                    //                try await doDRMCheck(s: UserDefaults.standard.string(forKey: "userToken")!)
+                    loggedIn = true
+                } catch {
+                    UIApplication.shared.change(title: "Error", body: "An error occured while validating your license. \(error.localizedDescription)\n\n (Logging out usually resolves unknown issues)", addCancelWithTitle: "Log Out", onCancel: {
+                        //                    #if DEBUG
+                        //                    UserDefaults.standard.set(nil, forKey: "customBackendURL")
+                        //                    #else
+                        sourcedRepoFetcher.logout()
+                        //                    #endif
+                    })
+                    return
+                }
             }
             if TARGET_OS_SIMULATOR == 0 {
                 //            let messages = ["This shouldn't take long", "Praying to RNGesus", "Ultra secret message"]

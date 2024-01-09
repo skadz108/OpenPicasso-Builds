@@ -15,30 +15,38 @@ struct AccountPage: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.openURL) var openURL
     
+    @State var showingLogin: Bool = false
+    
     var body: some View {
         Navigator {
             List {
-                Section(header: Label("Account", systemImage: "person")) {
-                    InfoCell(title: "Username", value: "@\(sourcedRepoFetcher.username ?? "Not Logged In")")
-                    InfoCell(title: "Email", value: "\(sourcedRepoFetcher.email ?? "Not Logged In")")
-                }
-                Section {
-                    Button {
-                        openURL(.init(string: "https://repo.sourceloc.net/account/general")!)
-                    } label: {
-                        Label("Change password", systemImage: "person.badge.key")
-                            .buttonStyle(.bordered)
-                        
+                if sourcedRepoFetcher.showLogin {
+                    Button("Log In", systemImage: "person.crop.circle.badge.plus", action: {
+                        showingLogin = true
+                    })
+                } else {
+                    Section(header: Label("Account", systemImage: "person")) {
+                        InfoCell(title: "Username", value: "@\(sourcedRepoFetcher.username ?? "Not Logged In")")
+                        InfoCell(title: "Email", value: "\(sourcedRepoFetcher.email ?? "Not Logged In")")
                     }
-                    Button {
-                        Haptic.shared.play(.soft)
-                        sourcedRepoFetcher.logout()
-                        dismiss()
-                    } label: {
-                        Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
-                            .buttonStyle(.bordered)
-                            .foregroundColor(.red)
-                        
+                    Section {
+                        Button {
+                            openURL(.init(string: "https://repo.sourceloc.net/account/general")!)
+                        } label: {
+                            Label("Change password", systemImage: "person.badge.key")
+                                .buttonStyle(.bordered)
+                            
+                        }
+                        Button {
+                            Haptic.shared.play(.soft)
+                            sourcedRepoFetcher.logout()
+                            dismiss()
+                        } label: {
+                            Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
+                                .buttonStyle(.bordered)
+                                .foregroundColor(.red)
+                            
+                        }
                     }
                 }
             }
@@ -53,6 +61,9 @@ struct AccountPage: View {
                     })
                 })
             }
+        }
+        .sheet(isPresented: $showingLogin) {
+            LoginView(onLogin: {dismiss()})
         }
         
 //        .alert("Change password", isPresented: $showingChangePasswordAlert) {

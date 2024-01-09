@@ -11,8 +11,6 @@ import FluidGradient
 
 
 struct LoginView: View {
-      
-    @EnvironmentObject var navigator: PathNavigator
     @Environment(\.openURL) var openURL
     
     var onLogin: () -> ()
@@ -110,9 +108,20 @@ struct LoginView: View {
                     .padding([.horizontal], 25)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(.thickMaterial)
+                    
                 }
             }
-            .interactiveDismissDisabled()
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(role: .cancel, action: {
+                    onLogin()
+                }, label: {
+                    Text("Skip")
+                })
+                .disabled(loginInProgress)
+            }
+        }
+//            .interactiveDismissDisabled()
 //        }
     }
         
