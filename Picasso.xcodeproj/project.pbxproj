@@ -1661,7 +1661,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Picasso/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "OpenPicasso Debug";
+				INFOPLIST_KEY_CFBundleDisplayName = OpenPicasso;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Grant full disk access. Required for app functionality.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location data never leaves the device and is never sent anywhere. It is used to trick iOS into not closing the app while in the background.";
