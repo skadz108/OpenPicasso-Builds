@@ -20,6 +20,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: true
+
+      - name: Install Theos
+        run: bash -c "$(curl -fsSL https://raw.githubusercontent.com/roothide/theos/master/bin/install-theos)"
+
+      - name: Setup Environment
+        run: echo "THEOS=~/theos" >> $GITHUB_ENV
           
       - name: Build IPA
         run: ./ipabuild.sh
